@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+
+import argparse
+from pathlib import Path
+import matplotlib.pyplot as plt
+import uproot
+import awkward as ak
+import scipy.stats
+import numpy as np
+import atlasify
+
+from common import robust_mean, robust_std
+
+
+base_dir = Path(__file__).parent.parent.parent
+
+parser = argparse.ArgumentParser()
+parser.add_argument("input", type=Path)
+parser.add_argument("mode", choices=["pixelalg", "pixeltool", "stripalg", "striptool"])
+parser.add_argument(
+    "--output",
+    type=Path,
+    help="Path to output file",
+)
+parser.add_argument("--show", action="store_true", help="Show plot")
+args = parser.parse_args()
+
+path_acts = {
+    "pixelalg": "ActsPixelClusterizationAlg/TimeVsClusters",
+    "pixeltool": "ActsPixelClusterizationAlg/ActsPixelClusteringTool/TimeVsClusters",
+    "stripalg": "ActsStripClusterizationAlg/TimeVsClusters",
+    "striptool": "ActsStripClusterizationAlg/ActsStripClusteringTool/TimeVsClusters",
+}[args.mode]
+path_athena = {
+    "pixelalg": "ITkPixelClusterization/TimeVsClusters",
+    "pixeltool": "ITkPixelClusterization/ITkMergedPixelsTool/TimeVsClusters",
+    "stripalg": "ITkStripClusterization/TimeVsClusters",
+    "striptool": "ITkStripClusterization/ITkStripClusteringTool/TimeVsClusters",
+}[args.mode]
+
+if args.mode.startswith("pixel"):
+    xlabel = "Number of Pixel Clusters"
+    bin_edges = np.array([140] + np.linspace(170, 310, 16).tolist() + [330]) * 1e3
+else:
+    xlabel = "Number of Strip Clusters"
+    bin_edges = np.array([140] + np.linspace(170, 310, 16).tolist() + [330]) * 1e3
+bin_mid = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+bin_size = 0.5 * (bin_edges[1:] - bin_edges[:-1])
+
+data = uproot.open(args.input)
+
+data_acts = ak.to_dataframe(data[path_acts].arrays(library="ak"))
+data_athena = ak.to_dataframe(data[path_athena].arrays(library="ak"))
+
+mean_acts, _, _ = scipy.stats.binned_statistic(
+    data_acts["NClustersCreated"],
+    data_acts["TIME_execute"],
+    bins=bin_edges,
+    statistic=robust_mean,
+)
+mean_athena, _, _ = scipy.stats.binned_statistic(
+    data_athena["NClustersCreated"],
+    data_athena["TIME_execute"],
+    bins=bin_edges,
+    statistic=robust_mean,
+)
+
+std_acts, _, _ = scipy.stats.binned_statistic(
+    data_acts["NClustersCreated"],
+    data_acts["TIME_execute"],
+    bins=bin_edges,
+    statistic=robust_std,
+)
+std_athena, _, _ = scipy.stats.binned_statistic(
+    data_athena["NClustersCreated"],
+    data_athena["TIME_execute"],
+    bins=bin_edges,
+    statistic=robust_std,
+)
+
+ymin = mean_athena.min()
+mean_acts /= ymin
+mean_athena /= ymin
+std_acts /= ymin
+std_athena /= ymin
+
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+
+ax.set_xlabel(xlabel)
+ax.set_ylabel("Average Execution Time [A.U.]")
+
+ax.errorbar(
+    x=bin_mid,
+    y=mean_acts,
+    xerr=bin_size,
+    yerr=std_acts,
+    label="ACTS in Athena",
+    fmt=".",
+)
+ax.errorbar(
+    x=bin_mid,
+    y=mean_athena,
+    xerr=bin_size,
+    yerr=std_athena,
+    label="Current Athena",
+    fmt=".",
+)
+
+ax.legend()
+
+subtext="""
+$\\sqrt{s} = 14$ TeV, HL-LHC, ITk Layout: 03-00-00
+$t\\bar{t}$, <$\\mu$> = 200
+ACTS v43.0.1
+Athena 25.0.40
+""".strip()
+
+atlasify.atlasify(
+    axes=ax,
+    brand="ATLAS",
+    atlas="Simulation Internal",
+    subtext=subtext,
+    enlarge=1.2,
+)
+plt.ticklabel_format(style="sci", axis="x", scilimits=(-5, 5), useMathText=True)
+
+ylim = ax.get_ylim()
+ax.set_ylim(0, ylim[1])
+
+fig.tight_layout()
+
+if args.output is not None:
+    fig.savefig(args.output)
+
+if args.output is None or args.show:
+    plt.show()
