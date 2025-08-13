@@ -94,16 +94,18 @@ ax.errorbar(
     y=mean_acts,
     xerr=bin_size,
     yerr=std_acts,
-    label="ACTS in Athena",
-    fmt=".",
+    label="ACTS in Athena, Mean $\\pm$ RMS",
+    fmt="o",
+    color="C0",
 )
 ax.errorbar(
     x=bin_mid,
     y=mean_athena,
     xerr=bin_size,
     yerr=std_athena,
-    label="Current Athena",
-    fmt=".",
+    label="Current Athena, Mean $\\pm$ RMS",
+    fmt="^",
+    color="C1",
 )
 
 ax.legend()
