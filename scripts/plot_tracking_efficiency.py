@@ -52,7 +52,7 @@ eff_athena.errorbar(
 
 ax.legend()
 
-subtext="""
+subtext = """
 $\\sqrt{s} = 14$ TeV, HL-LHC, ITk Layout: 03-00-00
 $t\\bar{t}$, <$\\mu$> = 200
 ACTS v43.0.1

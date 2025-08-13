@@ -42,9 +42,11 @@ else:
 eff_athena = TH1(input_athena_slow.Get(idtpm_path), xrange=(-4, 4))
 eff_acts = TH1(data_acts_fast.Get(idtpm_path), xrange=(-4, 4))
 
-fig, axs = plt.subplots(2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 3]})
+fig, axs = plt.subplots(
+    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 3]}
+)
 
-#axs[0].set_xlabel("$\\eta$")
+# axs[0].set_xlabel("$\\eta$")
 axs[0].set_ylabel(ylabel)
 
 axs[1].set_xlabel("$\\eta$")
@@ -59,7 +61,7 @@ eff_athena.errorbar(
 
 axs[0].legend()
 
-subtext="""
+subtext = """
 $\\sqrt{s} = 14$ TeV, HL-LHC, ITk Layout: 03-00-00
 $t\\bar{t}$, <$\\mu$> = 200
 ACTS v43.0.1
@@ -93,7 +95,12 @@ axs[1].hlines(
 axs[1].errorbar(
     eff_acts.x,
     eff_acts.y / eff_athena.y,
-    yerr=ratio_std(eff_acts.y, eff_athena.y, 0.5 * (eff_acts.y_err_hi - eff_acts.y_err_lo), 0.5 * (eff_athena.y_err_hi - eff_athena.y_err_lo)),
+    yerr=ratio_std(
+        eff_acts.y,
+        eff_athena.y,
+        0.5 * (eff_acts.y_err_hi - eff_acts.y_err_lo),
+        0.5 * (eff_athena.y_err_hi - eff_athena.y_err_lo),
+    ),
     xerr=(eff_acts.x_err_lo, eff_acts.x_err_hi),
     marker="o",
     linestyle="",
