@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 import matplotlib.pyplot as plt
+import numpy as np
 import ROOT
 import atlasify
 
@@ -19,7 +20,7 @@ parser.add_argument("input_athena_slow", type=Path)
 parser.add_argument("--input-acts-fast", type=Path)
 parser.add_argument("--input-acts-slow", type=Path)
 parser.add_argument("--input-acts-slow-analog", type=Path)
-parser.add_argument("mode", choices=["d0", "z0", "ptqopt"])
+parser.add_argument("mode", choices=["pixel_inner", "pixel", "strip"])
 parser.add_argument(
     "--output",
     type=Path,
@@ -41,17 +42,17 @@ data_acts_slow_analog = (
     else None
 )
 
-if args.mode == "d0":
-    idtpm_path = "InDetTrackPerfMonPlots/TrkAnaEF_EFsel/Offline/Tracks/Resolutions/resolution_d0_vs_truth_eta"
-    ylabel = "$\\sigma(d_0)$ [μm]"
-elif args.mode == "z0":
-    idtpm_path = "InDetTrackPerfMonPlots/TrkAnaEF_EFsel/Offline/Tracks/Resolutions/resolution_z0_vs_truth_eta"
-    ylabel = "$\\sigma(z_0)$ [μm]"
-elif args.mode == "ptqopt":
-    idtpm_path = "InDetTrackPerfMonPlots/TrkAnaEF_EFsel/Offline/Tracks/Resolutions/resolution_ptqopt_vs_truth_eta"
-    ylabel = "$p_T \\cdot \\sigma(q/p_T)$"
+if args.mode == "pixel_inner":
+    idtpm_path = "InDetTrackPerfMonPlots/TrkAnaEF_EFsel/Offline/Tracks/HitsOnTracks/offl_nInnerMostPixelHits_vs_offl_eta"
+    ylabel = "Number of Inner Pixel Hits"
+elif args.mode == "pixel":
+    idtpm_path = "InDetTrackPerfMonPlots/TrkAnaEF_EFsel/Offline/Tracks/HitsOnTracks/offl_nPixelHits_vs_offl_eta"
+    ylabel = "Number of Pixel Hits"
+elif args.mode == "strip":
+    idtpm_path = "InDetTrackPerfMonPlots/TrkAnaEF_EFsel/Offline/Tracks/HitsOnTracks/offl_nSCTHits_vs_offl_eta"
+    ylabel = "Number of Strip Hits"
 else:
-    raise ValueError("Invalid mode specified. Choose 'd0', 'z0', or 'ptqopt'.")
+    raise ValueError("Invalid mode specified")
 
 eff_athena_slow = TH1(data_athena_slow.Get(idtpm_path), xrange=(-4, 4))
 eff_acts_fast = (
@@ -116,19 +117,11 @@ if eff_acts_slow_analog is not None:
 
 axs[0].legend()
 
-subtext = """
-$\\sqrt{s} = 14$ TeV, HL-LHC, ITk Layout: 03-00-00
-$t\\bar{t}$, <$\\mu$> = 200
-ACTS v43.0.1
-Athena 25.0.40
-""".strip()
-
 atlasify.atlasify(
     axes=axs[0],
-    brand="ATLAS",
-    atlas="Simulation Internal",
-    subtext=subtext,
-    enlarge=2.0,
+    brand=None,
+    atlas=None,
+    subtext=None,
 )
 
 # axs[1].errorbar(
@@ -147,10 +140,12 @@ axs[1].hlines(
     color="C0",
     linestyle="--",
 )
+divisor = np.copy(eff_athena_slow.y)
+divisor[divisor < 0.1] = float("nan")
 if eff_acts_fast is not None:
     axs[1].errorbar(
         eff_acts_fast.x,
-        eff_acts_fast.y / eff_athena_slow.y,
+        eff_acts_fast.y / divisor,
         yerr=ratio_std(
             eff_acts_fast.y,
             eff_athena_slow.y,
@@ -167,7 +162,7 @@ if eff_acts_fast is not None:
 if eff_acts_slow is not None:
     axs[1].errorbar(
         eff_acts_slow.x,
-        eff_acts_slow.y / eff_athena_slow.y,
+        eff_acts_slow.y / divisor,
         yerr=ratio_std(
             eff_acts_slow.y,
             eff_athena_slow.y,
@@ -184,7 +179,7 @@ if eff_acts_slow is not None:
 if eff_acts_slow_analog is not None:
     axs[1].errorbar(
         eff_acts_slow_analog.x,
-        eff_acts_slow_analog.y / eff_athena_slow.y,
+        eff_acts_slow_analog.y / divisor,
         yerr=ratio_std(
             eff_acts_slow_analog.y,
             eff_athena_slow.y,
