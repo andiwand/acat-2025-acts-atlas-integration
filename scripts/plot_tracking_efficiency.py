@@ -40,6 +40,8 @@ eff_acts = TH1(data_acts_fast.Get(idtpm_path), xrange=(-4, 4))
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
+ax.set_xlim(-4, 4)
+
 ax.set_xlabel("$\\eta$")
 ax.set_ylabel(ylabel)
 

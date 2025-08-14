@@ -3,7 +3,6 @@
 import argparse
 from pathlib import Path
 import matplotlib.pyplot as plt
-import numpy as np
 import ROOT
 import atlasify
 
@@ -45,6 +44,8 @@ eff_acts = TH1(data_acts_fast.Get(idtpm_path), xrange=(-4, 4))
 fig, axs = plt.subplots(
     2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 3]}
 )
+
+axs[0].set_xlim(-4, 4)
 
 # axs[0].set_xlabel("$\\eta$")
 axs[0].set_ylabel(ylabel)
