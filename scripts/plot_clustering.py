@@ -110,11 +110,11 @@ ax.errorbar(
 
 ax.legend()
 
-subtext = """
-$\\sqrt{s} = 14$ TeV, HL-LHC, ITk Layout: 03-00-00
-$t\\bar{t}$, <$\\mu$> = 200
-ACTS v43.0.1
-Athena 25.0.40
+subtext = r"""
+$\sqrt{s} = 14$ TeV, HL-LHC
+$t\bar{t}$, $\langle \mu \rangle$ = 200
+ITk Layout: 03-00-00
+ACTS v43.0.1, Athena 25.0.40
 """.strip()
 
 atlasify.atlasify(
