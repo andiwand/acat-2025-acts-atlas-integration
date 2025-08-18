@@ -81,12 +81,21 @@ axs[1].set_ylabel("Ratio")
 
 eff_athena_slow.errorbar(
     axs[0],
-    label="Current Athena, Default",
+    label="Current Athena",
     marker="^",
     markersize=markersize,
     linestyle="",
     color="C0",
 )
+if eff_acts_slow is not None:
+    eff_acts_slow.errorbar(
+        axs[0],
+        label="ACTS in Athena",
+        marker="s",
+        markersize=markersize,
+        linestyle="",
+        color="C1",
+    )
 if eff_acts_fast is not None:
     eff_acts_fast.errorbar(
         axs[0],
@@ -94,21 +103,12 @@ if eff_acts_fast is not None:
         marker="o",
         markersize=markersize,
         linestyle="",
-        color="C1",
-    )
-if eff_acts_slow is not None:
-    eff_acts_slow.errorbar(
-        axs[0],
-        label="ACTS in Athena, Default",
-        marker="s",
-        markersize=markersize,
-        linestyle="",
         color="C2",
     )
 if eff_acts_slow_analog is not None:
     eff_acts_slow_analog.errorbar(
         axs[0],
-        label="ACTS in Athena, Default, Analog",
+        label="ACTS in Athena, Analog",
         marker="D",
         markersize=markersize,
         linestyle="",
@@ -142,23 +142,6 @@ axs[1].hlines(
 )
 divisor = np.copy(eff_athena_slow.y)
 divisor[divisor < 0.1] = float("nan")
-if eff_acts_fast is not None:
-    axs[1].errorbar(
-        eff_acts_fast.x,
-        eff_acts_fast.y / divisor,
-        yerr=ratio_std(
-            eff_acts_fast.y,
-            eff_athena_slow.y,
-            0.5 * (eff_acts_fast.y_err_hi - eff_acts_fast.y_err_lo),
-            0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
-        ),
-        xerr=(eff_acts_fast.x_err_lo, eff_acts_fast.x_err_hi),
-        marker="o",
-        markersize=markersize,
-        linestyle="",
-        color="C1",
-        alpha=0.5,
-    )
 if eff_acts_slow is not None:
     axs[1].errorbar(
         eff_acts_slow.x,
@@ -171,6 +154,23 @@ if eff_acts_slow is not None:
         ),
         xerr=(eff_acts_slow.x_err_lo, eff_acts_slow.x_err_hi),
         marker="s",
+        markersize=markersize,
+        linestyle="",
+        color="C1",
+        alpha=0.5,
+    )
+if eff_acts_fast is not None:
+    axs[1].errorbar(
+        eff_acts_fast.x,
+        eff_acts_fast.y / divisor,
+        yerr=ratio_std(
+            eff_acts_fast.y,
+            eff_athena_slow.y,
+            0.5 * (eff_acts_fast.y_err_hi - eff_acts_fast.y_err_lo),
+            0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
+        ),
+        xerr=(eff_acts_fast.x_err_lo, eff_acts_fast.x_err_hi),
+        marker="o",
         markersize=markersize,
         linestyle="",
         color="C2",

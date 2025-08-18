@@ -49,40 +49,40 @@ bin_size = 0.5 * (bin_edges[1:] - bin_edges[:-1])
 
 data = uproot.open(args.input)
 
-data_acts = ak.to_dataframe(data[path_acts].arrays(library="ak"))
 data_athena = ak.to_dataframe(data[path_athena].arrays(library="ak"))
+data_acts = ak.to_dataframe(data[path_acts].arrays(library="ak"))
 
-mean_acts, _, _ = scipy.stats.binned_statistic(
-    data_acts["NClustersCreated"],
-    data_acts["TIME_execute"],
-    bins=bin_edges,
-    statistic=robust_mean,
-)
 mean_athena, _, _ = scipy.stats.binned_statistic(
     data_athena["NClustersCreated"],
     data_athena["TIME_execute"],
     bins=bin_edges,
     statistic=robust_mean,
 )
-
-std_acts, _, _ = scipy.stats.binned_statistic(
+mean_acts, _, _ = scipy.stats.binned_statistic(
     data_acts["NClustersCreated"],
     data_acts["TIME_execute"],
     bins=bin_edges,
-    statistic=robust_std,
+    statistic=robust_mean,
 )
+
 std_athena, _, _ = scipy.stats.binned_statistic(
     data_athena["NClustersCreated"],
     data_athena["TIME_execute"],
     bins=bin_edges,
     statistic=robust_std,
 )
+std_acts, _, _ = scipy.stats.binned_statistic(
+    data_acts["NClustersCreated"],
+    data_acts["TIME_execute"],
+    bins=bin_edges,
+    statistic=robust_std,
+)
 
 ymin = mean_athena.min()
-mean_acts /= ymin
 mean_athena /= ymin
-std_acts /= ymin
+mean_acts /= ymin
 std_athena /= ymin
+std_acts /= ymin
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
@@ -91,19 +91,19 @@ ax.set_ylabel("Average Execution Time [A.U.]")
 
 ax.errorbar(
     x=bin_mid,
-    y=mean_acts,
+    y=mean_athena,
     xerr=bin_size,
-    yerr=std_acts,
-    label="ACTS in Athena, Mean $\\pm$ RMS",
+    yerr=std_athena,
+    label="Current Athena, Mean $\\pm$ RMS",
     fmt="o",
     color="C0",
 )
 ax.errorbar(
     x=bin_mid,
-    y=mean_athena,
+    y=mean_acts,
     xerr=bin_size,
-    yerr=std_athena,
-    label="Current Athena, Mean $\\pm$ RMS",
+    yerr=std_acts,
+    label="ACTS in Athena, Mean $\\pm$ RMS",
     fmt="^",
     color="C1",
 )

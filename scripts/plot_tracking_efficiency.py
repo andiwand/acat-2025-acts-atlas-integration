@@ -68,20 +68,20 @@ ax.set_xlabel("$\\eta$")
 ax.set_ylabel(ylabel)
 
 eff_athena_slow.errorbar(
-    ax, label="Current Athena, Default", marker="^", linestyle="", color="C0"
+    ax, label="Current Athena", marker="^", linestyle="", color="C0"
 )
-if eff_acts_fast is not None:
-    eff_acts_fast.errorbar(
-        ax, label="ACTS in Athena, Fast", marker="o", linestyle="", color="C1"
-    )
 if eff_acts_slow is not None:
     eff_acts_slow.errorbar(
-        ax, label="ACTS in Athena, Default", marker="s", linestyle="", color="C2"
+        ax, label="ACTS in Athena", marker="s", linestyle="", color="C1"
+    )
+if eff_acts_fast is not None:
+    eff_acts_fast.errorbar(
+        ax, label="ACTS in Athena, Fast", marker="o", linestyle="", color="C2"
     )
 if eff_acts_slow_analog is not None:
     eff_acts_slow_analog.errorbar(
         ax,
-        label="ACTS in Athena, Default, Analog",
+        label="ACTS in Athena, Analog",
         marker="D",
         linestyle="",
         color="C3",
