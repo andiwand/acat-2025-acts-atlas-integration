@@ -113,7 +113,7 @@ lines += [
     # ("Pipeline report", datetime(2025, 8, 1)),
 ]
 
-start, end = datetime(year=2025, month=1, day=1), datetime(year=2025, month=3, day=1)
+start, end = datetime(year=2025, month=1, day=6), datetime(year=2025, month=3, day=1)
 ax.fill_between([start, end], 0, 80, color="lightgray", alpha=0.25, ec="none")
 ax.text(
     start + (end - start) / 2, 80, "(1)", rotation=0, va="top", ha="center", fontsize=10
@@ -175,6 +175,7 @@ HS23: 27
 
 ds = r"""
 ITk Layout: 03-00-00, $t\bar{t}$, $\langle\mu\rangle = 200$, $\sqrt{s} = 14$ TeV
+ACTS-based, Fast
 """
 
 ax.text(0.16, 0.52, s=s.strip(), transform=ax.transAxes)
@@ -203,7 +204,7 @@ ax.text(
     va="bottom",
 )
 
-ax.text(0.01, 0.85, s=ds.strip(), transform=ax.transAxes)
+ax.text(0.01, 0.83, s=ds.strip(), transform=ax.transAxes)
 
 fig.tight_layout()
 

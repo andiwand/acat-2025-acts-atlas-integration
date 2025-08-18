@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import ROOT
 import atlasify
 
-from common import TH1
+from common import TH1, ratio_std
 
 
 base_dir = Path(__file__).parent.parent.parent
@@ -60,34 +60,36 @@ eff_acts_slow_analog = (
     else None
 )
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+fig, axs = plt.subplots(
+    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 3]}
+)
 
-ax.set_xlim(-4, 4)
+axs[0].set_xlim(-4, 4)
 
-ax.set_xlabel("$\\eta$")
-ax.set_ylabel(ylabel)
+# axs[0].set_xlabel("$\\eta$")
+axs[0].set_ylabel(ylabel)
 
 eff_athena_slow.errorbar(
-    ax, label="Current Athena", marker="^", linestyle="", color="C0"
+    axs[0], label="None ACTS", marker="^", linestyle="", color="C0"
 )
 if eff_acts_slow is not None:
     eff_acts_slow.errorbar(
-        ax, label="ACTS in Athena", marker="s", linestyle="", color="C1"
+        axs[0], label="ACTS-based", marker="s", linestyle="", color="C1"
     )
 if eff_acts_fast is not None:
     eff_acts_fast.errorbar(
-        ax, label="ACTS in Athena, Fast", marker="o", linestyle="", color="C2"
+        axs[0], label="ACTS-based, Fast", marker="o", linestyle="", color="C2"
     )
 if eff_acts_slow_analog is not None:
     eff_acts_slow_analog.errorbar(
-        ax,
-        label="ACTS in Athena, Analog",
+        axs[0],
+        label="ACTS-based, Analog",
         marker="D",
         linestyle="",
         color="C3",
     )
 
-ax.legend()
+axs[0].legend()
 
 subtext = r"""
 $\sqrt{s} = 14$ TeV, HL-LHC
@@ -97,11 +99,71 @@ ACTS v43.0.1, Athena 25.0.40
 """.strip()
 
 atlasify.atlasify(
-    axes=ax,
+    axes=axs[0],
     brand="ATLAS",
     atlas="Simulation Internal",
     subtext=subtext,
-    enlarge=1.6,
+    enlarge=2.0,
+)
+
+axs[1].hlines(
+    1,
+    xmin=eff_athena_slow.x[0],
+    xmax=eff_athena_slow.x[-1],
+    color="C0",
+    linestyle="--",
+)
+if eff_acts_slow is not None:
+    axs[1].errorbar(
+        eff_acts_slow.x,
+        eff_acts_slow.y / eff_athena_slow.y,
+        yerr=ratio_std(
+            eff_acts_slow.y,
+            eff_athena_slow.y,
+            0.5 * (eff_acts_slow.y_err_hi - eff_acts_slow.y_err_lo),
+            0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
+        ),
+        xerr=(eff_acts_slow.x_err_lo, eff_acts_slow.x_err_hi),
+        marker="s",
+        linestyle="",
+        color="C1",
+    )
+if eff_acts_fast is not None:
+    axs[1].errorbar(
+        eff_acts_fast.x,
+        eff_acts_fast.y / eff_athena_slow.y,
+        yerr=ratio_std(
+            eff_acts_fast.y,
+            eff_athena_slow.y,
+            0.5 * (eff_acts_fast.y_err_hi - eff_acts_fast.y_err_lo),
+            0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
+        ),
+        xerr=(eff_acts_fast.x_err_lo, eff_acts_fast.x_err_hi),
+        marker="o",
+        linestyle="",
+        color="C2",
+    )
+if eff_acts_slow_analog is not None:
+    axs[1].errorbar(
+        eff_acts_slow_analog.x,
+        eff_acts_slow_analog.y / eff_athena_slow.y,
+        yerr=ratio_std(
+            eff_acts_slow_analog.y,
+            eff_athena_slow.y,
+            0.5 * (eff_acts_slow_analog.y_err_hi - eff_acts_slow_analog.y_err_lo),
+            0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
+        ),
+        xerr=(eff_acts_slow_analog.x_err_lo, eff_acts_slow_analog.x_err_hi),
+        marker="D",
+        linestyle="",
+        color="C3",
+    )
+
+atlasify.atlasify(
+    axes=axs[1],
+    brand=None,
+    atlas=None,
+    subtext=None,
 )
 
 fig.tight_layout()

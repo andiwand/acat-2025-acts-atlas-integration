@@ -81,7 +81,7 @@ axs[1].set_ylabel("Ratio")
 
 eff_athena_slow.errorbar(
     axs[0],
-    label="Current Athena",
+    label="None ACTS",
     marker="^",
     markersize=markersize,
     linestyle="",
@@ -90,7 +90,7 @@ eff_athena_slow.errorbar(
 if eff_acts_slow is not None:
     eff_acts_slow.errorbar(
         axs[0],
-        label="ACTS in Athena",
+        label="ACTS-based",
         marker="s",
         markersize=markersize,
         linestyle="",
@@ -99,7 +99,7 @@ if eff_acts_slow is not None:
 if eff_acts_fast is not None:
     eff_acts_fast.errorbar(
         axs[0],
-        label="ACTS in Athena, Fast",
+        label="ACTS-based, Fast",
         marker="o",
         markersize=markersize,
         linestyle="",
@@ -108,7 +108,7 @@ if eff_acts_fast is not None:
 if eff_acts_slow_analog is not None:
     eff_acts_slow_analog.errorbar(
         axs[0],
-        label="ACTS in Athena, Analog",
+        label="ACTS-based, Analog",
         marker="D",
         markersize=markersize,
         linestyle="",

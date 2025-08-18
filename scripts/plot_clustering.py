@@ -94,7 +94,7 @@ ax.errorbar(
     y=mean_athena,
     xerr=bin_size,
     yerr=std_athena,
-    label="Current Athena, Mean $\\pm$ RMS",
+    label="None ACTS, Mean $\\pm$ RMS",
     fmt="o",
     color="C0",
 )
@@ -103,7 +103,7 @@ ax.errorbar(
     y=mean_acts,
     xerr=bin_size,
     yerr=std_acts,
-    label="ACTS in Athena, Mean $\\pm$ RMS",
+    label="ACTS-based, Mean $\\pm$ RMS",
     fmt="^",
     color="C1",
 )
