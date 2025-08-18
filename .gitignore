@@ -1,0 +1,16 @@
+# python
+__pycache__/
+
+# snakemake
+.snakemake/
+
+# latex
+*.aux
+*.log
+*.out
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.toc
+*.synctex.gz

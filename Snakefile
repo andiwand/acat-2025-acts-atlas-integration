@@ -57,7 +57,10 @@ rule plot_tracking_efficiency:
         "plots/tracking_efficiency_{mode}.pdf",
     shell:
         """
-        python {input.script} {input.root_athena_default} --input-acts-fast {input.root_acts_fast} --input-acts-slow {input.root_acts_slow} --input-acts-slow-analog {input.root_acts_slow_analog} {wildcards.mode} --output {output}
+        python {input.script} {input.root_athena_default} {wildcards.mode} \
+        --input-acts-fast {input.root_acts_fast} \
+        --input-acts-slow {input.root_acts_slow} \
+        --output {output}
         """
 
 rule plot_tracking_resolution:
@@ -71,7 +74,10 @@ rule plot_tracking_resolution:
         "plots/tracking_resolution_{mode}.pdf",
     shell:
         """
-        python {input.script} {input.root_athena_default} --input-acts-fast {input.root_acts_fast} --input-acts-slow {input.root_acts_slow} --input-acts-slow-analog {input.root_acts_slow_analog} {wildcards.mode} --output {output}
+        python {input.script} {input.root_athena_default} {wildcards.mode} \
+        --input-acts-fast {input.root_acts_fast} \
+        --input-acts-slow {input.root_acts_slow} \
+        --output {output}
         """
 
 rule plot_tracking_hits:
@@ -85,5 +91,8 @@ rule plot_tracking_hits:
         "plots/monitoring/tracking_hits_{mode}.pdf",
     shell:
         """
-        python {input.script} {input.root_athena_default} --input-acts-fast {input.root_acts_fast} --input-acts-slow {input.root_acts_slow} --input-acts-slow-analog {input.root_acts_slow_analog} {wildcards.mode} --output {output}
+        python {input.script} {input.root_athena_default} {wildcards.mode} \
+        --input-acts-fast {input.root_acts_fast} \
+        --input-acts-slow {input.root_acts_slow} \
+        --output {output}
         """
