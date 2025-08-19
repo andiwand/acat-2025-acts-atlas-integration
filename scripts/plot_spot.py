@@ -5,7 +5,7 @@
 # dependencies = [
 #  "matplotlib",
 #  "pandas",
-#  "mplhep"
+#  "atlasify"
 # ]
 # ///
 
@@ -15,7 +15,8 @@ from datetime import datetime, timedelta
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import mplhep as hep
+import atlasify
+
 
 
 parser = argparse.ArgumentParser()
@@ -63,7 +64,7 @@ df_main = pd.concat([df_main_fast, df_main_mixed[df_main_mixed.build_date > stit
 
 df_main
 
-fig, ax = plt.subplots(1, 1, figsize=(12, 5))
+fig, ax = plt.subplots(1, 1, figsize=(10, 4))
 # fig.subplots_adjust(wspace=0.01)
 
 components = [
@@ -122,7 +123,7 @@ ax.text(
 for rel, y, rot, ha, date in lines:
     # ax.axvline(date, color="gray", linestyle="--")
     ax.vlines(date, ymin=0, ymax=80, color="gray", linestyle="--")
-    off = timedelta(days=2) * (-1 if ha == "right" else 1)
+    off = timedelta(days=1) * (-1 if ha == "right" else 1)
     ax.text(date + off, y, rel, rotation=rot, va="top", ha=ha, fontsize=10)
 
 if HS23 != 1:
@@ -140,7 +141,7 @@ ax.plot(plot_df["build_date"], time_sum, label="Total", color="black", linewidth
 
 
 _, ymax = ax.get_ylim()
-ax.set_ylim(0, ymax * 1.21)
+# ax.set_ylim(0, ymax*1.21)
 # ax2.set_ylim(0)
 for _ax in (ax,):
     _ax.set_xlabel("Date")
@@ -182,29 +183,39 @@ ax.text(0.16, 0.52, s=s.strip(), transform=ax.transAxes)
 
 # hep.atlas.text("", fontsize=16)
 
-ax.text(
-    0.01,
-    0.897,
-    s="ATLAS",
-    fontname="TeX Gyre Heros",
-    transform=ax.transAxes,
-    fontsize=16 * 1.2,
-    va="bottom",
-    fontstyle="italic",
-    fontweight="bold",
-)
+# ax.text(
+#         0.01,
+#         0.897,
+#         s="ATLAS",
+#         fontname="TeX Gyre Heros",
+#         transform=ax.transAxes,
+#         fontsize=16*1.2,
+#         va="bottom",
+#         fontstyle="italic",
+#         fontweight="bold",
+#     )
 
-ax.text(
-    0.1,
-    0.897 + 0.0005,
-    s="Simulation Internal",
-    fontname="TeX Gyre Heros",
-    transform=ax.transAxes,
-    fontsize=16,
-    va="bottom",
-)
+# ax.text(
+#         0.1,
+#         0.897+0.0005,
+#         s="Simulation Internal",
+#         fontname="TeX Gyre Heros",
+#         transform=ax.transAxes,
+#         fontsize=16,
+#         va="bottom",
+#     )
 
-ax.text(0.01, 0.83, s=ds.strip(), transform=ax.transAxes)
+# ax.text(0.01, 0.85, s=ds.strip(), transform=ax.transAxes)
+
+
+atlasify.atlasify(
+    axes=ax,
+    brand="ATLAS",
+    atlas="Simulation Internal",
+    subtext=ds.strip(),
+    enlarge=1.3,
+)
+# plt.ticklabel_format(style="sci", axis="x", scilimits=(-5, 5), useMathText=True)
 
 fig.tight_layout()
 
