@@ -80,7 +80,7 @@ axs[1].set_ylabel("Ratio")
 
 eff_athena_slow.errorbar(
     axs[0],
-    label="None ACTS",
+    label="Non-ACTS",
     marker="^",
     markersize=markersize,
     linestyle="",

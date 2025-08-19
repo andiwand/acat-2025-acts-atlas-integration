@@ -70,7 +70,7 @@ axs[0].set_xlim(-4, 4)
 axs[0].set_ylabel(ylabel)
 
 eff_athena_slow.errorbar(
-    axs[0], label="None ACTS", marker="^", linestyle="", color="C0"
+    axs[0], label="Non-ACTS", marker="^", linestyle="", color="C0"
 )
 if eff_acts_slow is not None:
     eff_acts_slow.errorbar(

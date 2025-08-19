@@ -94,7 +94,7 @@ ax.errorbar(
     y=mean_athena,
     xerr=bin_size,
     yerr=std_athena,
-    label="None ACTS, Mean $\\pm$ RMS",
+    label="Non-ACTS, Mean $\\pm$ RMS",
     fmt="o",
     color="C0",
 )
