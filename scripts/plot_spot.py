@@ -217,6 +217,9 @@ atlasify.atlasify(
 )
 # plt.ticklabel_format(style="sci", axis="x", scilimits=(-5, 5), useMathText=True)
 
+ylim = ax.get_ylim()
+ax.set_ylim(0, ylim[1])
+
 fig.tight_layout()
 
 if args.output is not None:
