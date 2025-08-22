@@ -61,13 +61,16 @@ eff_acts_slow_analog = (
 )
 
 fig, axs = plt.subplots(
-    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 3]}
+    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 4]}
 )
 
 axs[0].set_xlim(-4, 4)
 
 # axs[0].set_xlabel("$\\eta$")
 axs[0].set_ylabel(ylabel)
+
+axs[1].set_xlabel("$\\eta$")
+axs[1].set_ylabel("ACTS / Non-ACTS")
 
 eff_athena_slow.errorbar(
     axs[0], label="Non-ACTS", marker="^", linestyle="", color="C0"

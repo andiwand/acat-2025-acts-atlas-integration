@@ -9,7 +9,7 @@ import scipy.stats
 import numpy as np
 import atlasify
 
-from common import robust_mean, robust_std
+from common import robust_mean, robust_std, ratio_std
 
 
 base_dir = Path(__file__).parent.parent.parent
@@ -84,12 +84,17 @@ mean_acts /= ymin
 std_athena /= ymin
 std_acts /= ymin
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+fig, axs = plt.subplots(
+    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 4]}
+)
 
-ax.set_xlabel(xlabel)
-ax.set_ylabel("Average Execution Time [A.U.]")
+# axs[0].set_xlabel(xlabel)
+axs[0].set_ylabel("Average Execution Time [A.U.]")
 
-ax.errorbar(
+axs[1].set_xlabel(xlabel)
+axs[1].set_ylabel("ACTS / Non-ACTS")
+
+axs[0].errorbar(
     x=bin_mid,
     y=mean_athena,
     xerr=bin_size,
@@ -98,7 +103,7 @@ ax.errorbar(
     fmt="o",
     color="C0",
 )
-ax.errorbar(
+axs[0].errorbar(
     x=bin_mid,
     y=mean_acts,
     xerr=bin_size,
@@ -108,7 +113,7 @@ ax.errorbar(
     color="C1",
 )
 
-ax.legend()
+axs[0].legend()
 
 subtext = r"""
 $\sqrt{s} = 14$ TeV, HL-LHC
@@ -118,16 +123,45 @@ ACTS v43.0.1, Athena 25.0.40
 """.strip()
 
 atlasify.atlasify(
-    axes=ax,
+    axes=axs[0],
     brand="ATLAS",
     atlas="Simulation Internal",
     subtext=subtext,
-    enlarge=1.2,
+    enlarge=1.8,
 )
 plt.ticklabel_format(style="sci", axis="x", scilimits=(-5, 5), useMathText=True)
 
-ylim = ax.get_ylim()
-ax.set_ylim(0, ylim[1])
+ylim = axs[0].get_ylim()
+axs[0].set_ylim(0, ylim[1])
+
+# axs[1].hlines(
+#     1,
+#     xmin=bin_edges[0],
+#     xmax=bin_edges[-1],
+#     color="C0",
+#     linestyle="--",
+# )
+axs[1].errorbar(
+    bin_mid,
+    mean_acts / mean_athena,
+    yerr=ratio_std(
+        mean_acts,
+        mean_athena,
+        std_acts,
+        std_athena,
+    ),
+    xerr=bin_size,
+    marker="s",
+    linestyle="",
+    color="C1",
+)
+
+atlasify.atlasify(
+    axes=axs[1],
+    brand=None,
+    atlas=None,
+    subtext=None,
+)
 
 fig.tight_layout()
 
