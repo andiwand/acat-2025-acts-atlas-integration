@@ -18,7 +18,6 @@ import pandas as pd
 import atlasify
 
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "input_folder", type=Path, help="Path to input folder containing CSV files"

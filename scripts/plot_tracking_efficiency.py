@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import ROOT
 import atlasify
 
-from common import TH1, ratio_std
+from common import markers, colors, TH1, ratio_std
 
 
 base_dir = Path(__file__).parent.parent.parent
@@ -61,7 +61,12 @@ eff_acts_slow_analog = (
 )
 
 fig, axs = plt.subplots(
-    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 4]}
+    2,
+    1,
+    figsize=(6, 4),
+    sharex=True,
+    gridspec_kw={"height_ratios": [10, 4], "hspace": 0.02},
+    layout="constrained",
 )
 
 axs[0].set_xlim(-4, 4)
@@ -73,23 +78,27 @@ axs[1].set_xlabel("$\\eta$")
 axs[1].set_ylabel("ACTS / Non-ACTS")
 
 eff_athena_slow.errorbar(
-    axs[0], label="Non-ACTS", marker="^", linestyle="", color="C0"
+    axs[0], label="Non-ACTS", linestyle="", marker=markers[0], color=colors[0]
 )
 if eff_acts_slow is not None:
     eff_acts_slow.errorbar(
-        axs[0], label="ACTS-based", marker="s", linestyle="", color="C1"
+        axs[0], label="ACTS-based", linestyle="", marker=markers[1], color=colors[1]
     )
 if eff_acts_fast is not None:
     eff_acts_fast.errorbar(
-        axs[0], label="ACTS-based, Fast", marker="o", linestyle="", color="C2"
+        axs[0],
+        label="ACTS-based, Fast",
+        linestyle="",
+        marker=markers[2],
+        color=colors[2],
     )
 if eff_acts_slow_analog is not None:
     eff_acts_slow_analog.errorbar(
         axs[0],
         label="ACTS-based, Analog",
-        marker="D",
         linestyle="",
-        color="C3",
+        marker=markers[3],
+        color=colors[3],
     )
 
 axs[0].legend()
@@ -113,7 +122,7 @@ axs[1].hlines(
     1,
     xmin=eff_athena_slow.x[0],
     xmax=eff_athena_slow.x[-1],
-    color="C0",
+    color=colors[0],
     linestyle="--",
 )
 if eff_acts_slow is not None:
@@ -127,9 +136,9 @@ if eff_acts_slow is not None:
             0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
         ),
         xerr=(eff_acts_slow.x_err_lo, eff_acts_slow.x_err_hi),
-        marker="s",
         linestyle="",
-        color="C1",
+        marker=markers[1],
+        color=colors[1],
     )
 if eff_acts_fast is not None:
     axs[1].errorbar(
@@ -142,9 +151,9 @@ if eff_acts_fast is not None:
             0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
         ),
         xerr=(eff_acts_fast.x_err_lo, eff_acts_fast.x_err_hi),
-        marker="o",
         linestyle="",
-        color="C2",
+        marker=markers[2],
+        color=colors[2],
     )
 if eff_acts_slow_analog is not None:
     axs[1].errorbar(
@@ -157,9 +166,9 @@ if eff_acts_slow_analog is not None:
             0.5 * (eff_athena_slow.y_err_hi - eff_athena_slow.y_err_lo),
         ),
         xerr=(eff_acts_slow_analog.x_err_lo, eff_acts_slow_analog.x_err_hi),
-        marker="D",
         linestyle="",
-        color="C3",
+        marker=markers[3],
+        color=colors[3],
     )
 
 atlasify.atlasify(
@@ -168,8 +177,6 @@ atlasify.atlasify(
     atlas=None,
     subtext=None,
 )
-
-fig.tight_layout()
 
 if args.output is not None:
     fig.savefig(args.output)

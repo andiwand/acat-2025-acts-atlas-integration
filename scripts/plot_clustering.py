@@ -9,7 +9,7 @@ import scipy.stats
 import numpy as np
 import atlasify
 
-from common import robust_mean, robust_std, ratio_std
+from common import markers, colors, robust_mean, robust_std, ratio_std
 
 
 base_dir = Path(__file__).parent.parent.parent
@@ -85,7 +85,12 @@ std_athena /= ymin
 std_acts /= ymin
 
 fig, axs = plt.subplots(
-    2, 1, figsize=(6, 4), sharex=True, gridspec_kw={"height_ratios": [10, 4]}
+    2,
+    1,
+    figsize=(6, 4),
+    sharex=True,
+    gridspec_kw={"height_ratios": [10, 4], "hspace": 0.02},
+    layout="constrained",
 )
 
 # axs[0].set_xlabel(xlabel)
@@ -99,9 +104,10 @@ axs[0].errorbar(
     y=mean_athena,
     xerr=bin_size,
     yerr=std_athena,
-    label="Non-ACTS, Mean $\\pm$ RMS",
-    fmt="o",
-    color="C0",
+    label="Non-ACTS Mean, $\\pm$ RMS",
+    linestyle="",
+    color=colors[0],
+    marker=markers[0],
 )
 axs[0].errorbar(
     x=bin_mid,
@@ -109,8 +115,9 @@ axs[0].errorbar(
     xerr=bin_size,
     yerr=std_acts,
     label="ACTS-based, Mean $\\pm$ RMS",
-    fmt="^",
-    color="C1",
+    linestyle="",
+    color=colors[1],
+    marker=markers[1],
 )
 
 axs[0].legend()
@@ -138,8 +145,8 @@ axs[0].set_ylim(0, ylim[1])
 #     1,
 #     xmin=bin_edges[0],
 #     xmax=bin_edges[-1],
-#     color="C0",
 #     linestyle="--",
+#     color=colors[0],
 # )
 axs[1].errorbar(
     bin_mid,
@@ -151,9 +158,9 @@ axs[1].errorbar(
         std_athena,
     ),
     xerr=bin_size,
-    marker="s",
     linestyle="",
-    color="C1",
+    color=colors[1],
+    marker=markers[1],
 )
 
 atlasify.atlasify(
@@ -162,8 +169,6 @@ atlasify.atlasify(
     atlas=None,
     subtext=None,
 )
-
-fig.tight_layout()
 
 if args.output is not None:
     fig.savefig(args.output)
