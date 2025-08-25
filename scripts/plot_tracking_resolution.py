@@ -66,6 +66,8 @@ eff_acts_slow_analog = (
     else None
 )
 
+atlasify.monkeypatch_axis_labels()
+
 fig, axs = plt.subplots(
     2,
     1,

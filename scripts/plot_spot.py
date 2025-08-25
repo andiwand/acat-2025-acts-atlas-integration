@@ -46,6 +46,8 @@ df_main_mixed["build_date"] = pd.to_datetime(df_main_mixed["build_date"])
 df_main_mixed = df_main_mixed.sort_values(by="build_date")
 df_main_mixed.index = df_main_mixed["build_date"]
 
+atlasify.monkeypatch_axis_labels()
+
 # fig, ax = plt.subplots(figsize=(10, 5))
 # df_main_mixed.plot(y="ActsTrackFindingAlg", kind="line", ax=ax)
 # ax.set_ylim(0, 3)

@@ -84,6 +84,8 @@ mean_acts /= ymin
 std_athena /= ymin
 std_acts /= ymin
 
+atlasify.monkeypatch_axis_labels()
+
 fig, axs = plt.subplots(
     2,
     1,
@@ -136,7 +138,6 @@ atlasify.atlasify(
     subtext=subtext,
     enlarge=1.8,
 )
-plt.ticklabel_format(style="sci", axis="x", scilimits=(-5, 5), useMathText=True)
 
 ylim = axs[0].get_ylim()
 axs[0].set_ylim(0, ylim[1])
@@ -169,6 +170,10 @@ atlasify.atlasify(
     atlas=None,
     subtext=None,
 )
+axs[1].xaxis.get_offset_text().set_x(1.07)
+axs[1].xaxis.get_offset_text().set_va("bottom")
+
+plt.ticklabel_format(style="sci", axis="x", scilimits=(-5, 5), useMathText=True)
 
 if args.output is not None:
     fig.savefig(args.output)
