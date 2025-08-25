@@ -106,7 +106,7 @@ axs[0].errorbar(
     y=mean_athena,
     xerr=bin_size,
     yerr=std_athena,
-    label="Non-ACTS Mean, $\\pm$ RMS",
+    label="Non-ACTS\nMean $\\pm$ RMS",
     linestyle="",
     color=colors[0],
     marker=markers[0],
@@ -116,7 +116,7 @@ axs[0].errorbar(
     y=mean_acts,
     xerr=bin_size,
     yerr=std_acts,
-    label="ACTS-based, Mean $\\pm$ RMS",
+    label="ACTS-based\nMean $\\pm$ RMS",
     linestyle="",
     color=colors[1],
     marker=markers[1],
@@ -134,7 +134,7 @@ ACTS v43.0.1, Athena 25.0.40
 atlasify.atlasify(
     axes=axs[0],
     brand="ATLAS",
-    atlas="Simulation Internal",
+    atlas="Simulation Preliminary",
     subtext=subtext,
     enlarge=1.8,
 )

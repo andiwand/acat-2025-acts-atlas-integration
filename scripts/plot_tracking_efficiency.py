@@ -115,7 +115,7 @@ ACTS v43.0.1, Athena 25.0.40
 atlasify.atlasify(
     axes=axs[0],
     brand="ATLAS",
-    atlas="Simulation Internal",
+    atlas="Simulation Preliminary",
     subtext=subtext,
     enlarge=2.0,
 )

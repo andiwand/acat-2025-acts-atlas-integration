@@ -199,7 +199,7 @@ ax.text(0.16, 0.52, s=s.strip(), transform=ax.transAxes)
 # ax.text(
 #         0.1,
 #         0.897+0.0005,
-#         s="Simulation Internal",
+#         s="Simulation Preliminary",
 #         fontname="TeX Gyre Heros",
 #         transform=ax.transAxes,
 #         fontsize=16,
@@ -212,7 +212,7 @@ ax.text(0.16, 0.52, s=s.strip(), transform=ax.transAxes)
 atlasify.atlasify(
     axes=ax,
     brand="ATLAS",
-    atlas="Simulation Internal",
+    atlas="Simulation Preliminary",
     subtext=ds.strip(),
     enlarge=1.3,
 )
