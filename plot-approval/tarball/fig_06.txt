@@ -1,0 +1,1 @@
+Relative transverse momentum $p_T$ resolution as a function of the pseudo-rapidity $\eta$ of the associated truth particle using the ITk Layout 03-00-00 for $t\bar{t}$ events at $\langle \mu \rangle = 200$.

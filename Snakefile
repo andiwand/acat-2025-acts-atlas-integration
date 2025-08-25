@@ -1,24 +1,19 @@
 rule all:
     input:
-        "plots/clustering_pixel.pdf",
-        "plots/clustering_strip.pdf",
-        "plots/spot.pdf",
-        "plots/tracking_efficiency_physics.pdf",
-        "plots/tracking_efficiency_technical.pdf",
-        "plots/tracking_resolution_d0.pdf",
-        "plots/tracking_resolution_z0.pdf",
-        "plots/tracking_resolution_ptqopt.pdf",
+        expand("plots/clustering_pixel.{ext}", ext=["pdf", "png"]),
+        expand("plots/clustering_strip.{ext}", ext=["pdf", "png"]),
+        expand("plots/spot.{ext}", ext=["pdf", "png"]),
+        expand("plots/tracking_efficiency_{mode}.{ext}", mode=["physics", "technical"], ext=["pdf", "png"]),
+        expand("plots/tracking_resolution_{mode}.{ext}", mode=["d0", "z0", "ptqopt"], ext=["pdf", "png"]),
 
-        "plots/monitoring/tracking_hits_pixel_inner.pdf",
-        "plots/monitoring/tracking_hits_pixel.pdf",
-        "plots/monitoring/tracking_hits_strip.pdf",
+        expand("plots/monitoring/tracking_hits_{mode}.{ext}", mode=["pixel_inner", "pixel", "strip"], ext=["pdf", "png"]),
 
 rule plot_clustering_pixel:
     input:
         script = "scripts/plot_clustering.py",
         root = "data/clustering/acts-expert-monitoring.root",
     output:
-        "plots/clustering_pixel.pdf",
+        "plots/clustering_pixel.{ext}",
     shell:
         """
         python {input.script} {input.root} pixelalg --output {output}
@@ -29,7 +24,7 @@ rule plot_clustering_strip:
         script = "scripts/plot_clustering.py",
         root = "data/clustering/acts-expert-monitoring.root",
     output:
-        "plots/clustering_strip.pdf",
+        "plots/clustering_strip.{ext}",
     shell:
         """
         python {input.script} {input.root} stripalg --output {output}
@@ -40,7 +35,7 @@ rule plot_spot:
         script = "scripts/plot_spot.py",
         folder = "data/spot",
     output:
-        "plots/spot.pdf",
+        "plots/spot.{ext}",
     shell:
         """
         python {input.script} {input.folder} --output {output}
@@ -54,7 +49,7 @@ rule plot_tracking_efficiency:
         root_acts_slow = "data/tracking/IDTPM_TTBAR_Acts_C100DEFAULT_digital.root",
         root_acts_slow_analog = "data/tracking/IDTPM_TTBAR_Acts_C100DEFAULT_analog.root",
     output:
-        "plots/tracking_efficiency_{mode}.pdf",
+        "plots/tracking_efficiency_{mode}.{ext}",
     shell:
         """
         python {input.script} {input.root_athena_default} {wildcards.mode} \
@@ -71,7 +66,7 @@ rule plot_tracking_resolution:
         root_acts_slow = "data/tracking/IDTPM_TTBAR_Acts_C100DEFAULT_digital.root",
         root_acts_slow_analog = "data/tracking/IDTPM_TTBAR_Acts_C100DEFAULT_analog.root",
     output:
-        "plots/tracking_resolution_{mode}.pdf",
+        "plots/tracking_resolution_{mode}.{ext}",
     shell:
         """
         python {input.script} {input.root_athena_default} {wildcards.mode} \
@@ -88,7 +83,7 @@ rule plot_tracking_hits:
         root_acts_slow = "data/tracking/IDTPM_TTBAR_Acts_C100DEFAULT_digital.root",
         root_acts_slow_analog = "data/tracking/IDTPM_TTBAR_Acts_C100DEFAULT_analog.root",
     output:
-        "plots/monitoring/tracking_hits_{mode}.pdf",
+        "plots/monitoring/tracking_hits_{mode}.{ext}",
     shell:
         """
         python {input.script} {input.root_athena_default} {wildcards.mode} \
