@@ -48,10 +48,10 @@ df_main_mixed.index = df_main_mixed["build_date"]
 
 atlasify.monkeypatch_axis_labels()
 
-# fig, ax = plt.subplots(figsize=(10, 5))
+# fig, ax = plt.subplots(figsize=(10, 5), dpi=200)
 # df_main_mixed.plot(y="ActsTrackFindingAlg", kind="line", ax=ax)
 # ax.set_ylim(0, 3)
-# fig, ax = plt.subplots(figsize=(10, 5))
+# fig, ax = plt.subplots(figsize=(10, 5), dpi=200)
 # df_main_fast.plot(y="ActsTrackFindingAlg", kind="line", ax=ax)
 # ax.set_ylim(0, 3)
 
@@ -59,13 +59,13 @@ stitch = df_main_fast.build_date.max()
 print("stitch", stitch)
 df_main = pd.concat([df_main_fast, df_main_mixed[df_main_mixed.build_date > stitch]])
 
-# fig, ax = plt.subplots(figsize=(10, 5))
+# fig, ax = plt.subplots(figsize=(10, 5), dpi=200)
 # df_main.plot(y="ActsTrackFindingAlg", kind="line", ax=ax)
 # ax.set_ylim(0, 3)
 
 df_main
 
-fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+fig, ax = plt.subplots(1, 1, figsize=(10, 4), dpi=200)
 # fig.subplots_adjust(wspace=0.01)
 
 components = [

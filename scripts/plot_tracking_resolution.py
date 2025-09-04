@@ -72,6 +72,7 @@ fig, axs = plt.subplots(
     2,
     1,
     figsize=(6, 4),
+    dpi=200,
     sharex=True,
     gridspec_kw={"height_ratios": [10, 4], "hspace": 0.05},
     layout="constrained",
