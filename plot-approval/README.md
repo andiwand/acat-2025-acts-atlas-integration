@@ -1,0 +1,3 @@
+- info https://atlas-po.docs.cern.ch/first-sub/#manual-tarball-creation
+- more info https://atlaspo.cern.ch/internal/figure_pages/faq.php
+- uploat portal https://atlaspo.cern.ch/internal/figure_pages/papers.php
